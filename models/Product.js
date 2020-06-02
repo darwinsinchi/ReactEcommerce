@@ -16,7 +16,7 @@ const ProductSchema = new mongoose.Schema({
   sku: {
     type: String,
     unique: true,
-    default: shortid.generate
+    default: shortid.generate()
   },
   description: {
     type: String,
@@ -29,5 +29,5 @@ const ProductSchema = new mongoose.Schema({
 });
 
 export default mongoose.models.Product ||
-  moongose.model("Product", ProductSchema);
+  mongoose.model("Product", ProductSchema);
 //we just chose the name Product, which will now be used as an import in the products.js file in api to retrieve info

@@ -2,15 +2,19 @@ import { Menu, Container, Image, Icon } from "semantic-ui-react";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import NProgress from "nprogress";
+import { handleLogout } from "../../utils/auth";
 
 Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
 Router.onRouteChangeError = () => NProgress.done();
 //the above is used to show the user the progress bar
 
-function Header() {
+function Header({ user }) {
+  // console.log("Test to see if user comes up once you're logged in " + user);
   const router = useRouter();
-  const user = true;
+  const isRoot = user && user.role === "root";
+  const isAdmin = user && user.role === "admin";
+  const isRootOrAdmin = isRoot || isAdmin;
 
   function isActive(route) {
     return route === router.pathname;
@@ -18,7 +22,7 @@ function Header() {
   }
 
   return (
-    <Menu fluid id="menu" inverted>
+    <Menu stackable fluid id="menu" inverted>
       <Container text>
         <Link href="/">
           <Menu.Item
@@ -31,7 +35,7 @@ function Header() {
               src="/static/logo.svg"
               style={{ marginRight: "1em" }}
             />
-            React Reserve
+            Darwin's MarketPlace
           </Menu.Item>
         </Link>
         <Link href="/cart">
@@ -41,7 +45,7 @@ function Header() {
           </Menu.Item>
         </Link>
 
-        {user && (
+        {isRootOrAdmin && (
           <Link href="/create">
             <Menu.Item header active={isActive("/create")}>
               <Icon name="add square" size="large" />
@@ -58,7 +62,7 @@ function Header() {
               </Menu.Item>
             </Link>
 
-            <Menu.Item header>
+            <Menu.Item onClick={handleLogout} header>
               <Icon name="sign out" size="large" />
               Logout
             </Menu.Item>

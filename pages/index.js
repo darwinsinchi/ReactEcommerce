@@ -1,31 +1,28 @@
 import React from "react";
 import axios from "axios";
+import ProductList from "../components/Index/ProductList";
+import ProductPagination from "../components/Index/ProductPagination";
+import baseUrl from "../utils/baseUrl";
 
-function Home({ products }) {
-  console.log(products);
-  // React.useEffect(() => {
-  //   getProducts();
-  //   //were executing getProducts which is run after componentsMount
-  // }, []);
-
-  // async function getProducts() {
-  //   const url = "http://localhost:3000/api/products";
-  //   const response = await axios.get(url);
-  //   console.log(response.data);
-  //   //data is found within js/ not a variable
-  // }
-  return <>home</>;
+function Home({ products, totalPages }) {
+  return (
+    <>
+      <ProductList products={products} />
+      <ProductPagination totalPages={totalPages} />
+    </>
+  );
 }
 
-Home.getInitialProps = async () => {
-  //check getInitialProps in app.js
-  //fetch data on server
-  const url = "http://localhost:3000/api/products";
-  const response = await axios.get(url);
-  return { products: response.data };
-  //return repsonse data as an object
-
-  //note.this object will be merger with existing props
+Home.getInitialProps = async ctx => {
+  const page = ctx.query.page ? ctx.query.page : "1";
+  const size = 9;
+  const url = `${baseUrl}/api/products`;
+  const payload = { params: { page, size } };
+  // fetch data on server
+  const response = await axios.get(url, payload);
+  // return response data as an object
+  return response.data;
+  // note: this object will be merged with existing props
 };
 
 export default Home;

@@ -4,10 +4,22 @@ import connectDb from "../../utils/connectDb";
 
 connectDb();
 
-//req and res are js objects
 export default async (req, res) => {
-  const products = await Product.find();
-  //find will give us everything
-  res.status(200).json(products);
-  //when you console.log(req.method) you will see on the terminal what kind of request you are sending out
+  const { page, size } = req.query;
+  // Convert querystring values to numbers
+  const pageNum = Number(page);
+  const pageSize = Number(size);
+  let products = [];
+  const totalDocs = await Product.countDocuments();
+  const totalPages = Math.ceil(totalDocs / pageSize);
+  if (pageNum === 1) {
+    products = await Product.find().limit(pageSize);
+  } else {
+    const skips = pageSize * (pageNum - 1);
+    products = await Product.find()
+      .skip(skips)
+      .limit(pageSize);
+  }
+  // const products = await Product.find();
+  res.status(200).json({ products, totalPages });
 };
