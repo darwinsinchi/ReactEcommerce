@@ -1,6 +1,6 @@
 {
   "name": "reactreserve",
-  "alias": "darwin-marketplace.now.sh.now.sh",
+  "alias": "darwin-marketplace.now.sh",
   "version": 1,
   "env": {
     "MONGO_SRV": "mongodb+srv://DarwinM:catherine1@reactreserve-zvsdh.mongodb.net/test?retryWrites=true&w=majority",
